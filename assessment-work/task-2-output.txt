@@ -1,0 +1,171 @@
+# ==================================================
+# Task 1: Download two datasets. Describe where they were sourced from, what they contain, and why they can be joined together.
+# ==================================================
+
+# The datasets were sourced from Kaggle, an open dataset platform, and contain two different tables of data pertaining to Pokemon. One of them contains all of the available Pokemon species in the mainline games, with information such as name, typing, abilities, and battle stats. The other contains the moves available for those Pokemon to use in battle, with information such as power, accuracy, and typing. They can be joined together through the mutually shared 'type' attribute.
+Below are links to the dataset:
+# https://www.kaggle.com/datasets/rounakbanik/pokemon
+# https://www.kaggle.com/datasets/thiagoamancio/full-pokemons-and-moves-datasets
+
+# ==================================================
+# Task 2: Load the datasets into Pandas DataFrames. Display the first 5 rows of each dataset, with the column names. Identify which column will be used for joining.
+# ==================================================
+
+First 5 rows of species table:
+                     abilities  attack  defense  height_m  hp        name  sp_attack  sp_defense  speed  type1   type2  weight_kg
+0  ['Overgrow', 'Chlorophyll']      49       49       0.7  45   Bulbasaur         65          65     45  grass  poison        6.9
+1  ['Overgrow', 'Chlorophyll']      62       63       1.0  60     Ivysaur         80          80     60  grass  poison       13.0
+2  ['Overgrow', 'Chlorophyll']     100      123       2.0  80    Venusaur        122         120     80  grass  poison      100.0
+3     ['Blaze', 'Solar Power']      52       43       0.6  39  Charmander         60          50     65   fire    none        8.5
+4     ['Blaze', 'Solar Power']      64       58       1.1  58  Charmeleon         80          65     80   fire    none       19.0
+
+First 5 rows of moves table:
+          name  accuracy  pp  power      type damage_class
+0        Pound     100.0  35   40.0    normal     Physical
+1  Karate Chop     100.0  25   50.0  fighting     Physical
+2  Double Slap      85.0  10   15.0    normal     Physical
+3  Comet Punch      85.0  15   18.0    normal     Physical
+4   Mega Punch      85.0  20   80.0    normal     Physical
+
+Column headings for species table:
+Index(['abilities', 'attack', 'defense', 'height_m', 'hp', 'name', 'sp_attack',
+       'sp_defense', 'speed', 'type1', 'type2', 'weight_kg'],
+      dtype='object')
+
+Column headings for moves table:
+Index(['name', 'accuracy', 'pp', 'power', 'type', 'damage_class'], dtype='object')
+
+# The columns that can be used for joining are the typing columns from the moves table and the two type columns in species. It would also be possible to manipulate the data slightly and make the 'type chart' section of the tables joinable. The use in joining at the type columns would be to identify what moves Pokemon can utilise to benefit from STAB (Same Type Attack bonus), a game mechanic whereby moves receive a 50% power boost if they share a type with the Pokemon using them.
+
+
+# ==================================================
+# Task 3: Perform an inner join using a common column. Display the dataset.
+# ==================================================
+
+# ==================================================
+# Inner Join:
+# ==================================================
+                          abilities  attack  defense  height_m  hp  ... accuracy  pp  power   type damage_class
+0      ['Overgrow', 'Chlorophyll']      49       49       0.7  45  ...    100.0  25   45.0  grass     Physical
+1      ['Overgrow', 'Chlorophyll']      49       49       0.7  45  ...    100.0  25   20.0  grass      Special
+2      ['Overgrow', 'Chlorophyll']      49       49       0.7  45  ...    100.0  15   40.0  grass      Special
+3      ['Overgrow', 'Chlorophyll']      49       49       0.7  45  ...     90.0  10    NaN  grass       Status
+4      ['Overgrow', 'Chlorophyll']      49       49       0.7  45  ...     95.0  25   55.0  grass     Physical
+...                            ...     ...      ...       ...  ..  ...      ...  ..    ...    ...          ...
+46764               ['Soul-Heart']      95      115       1.0  80  ...      NaN   1  200.0  steel     Physical
+46765               ['Soul-Heart']      95      115       1.0  80  ...    100.0   5   60.0  steel     Physical
+46766               ['Soul-Heart']      95      115       1.0  80  ...      NaN  10   10.0  steel     Physical
+46767               ['Soul-Heart']      95      115       1.0  80  ...     95.0   5  140.0  steel      Special
+46768               ['Soul-Heart']      95      115       1.0  80  ...    100.0   5  130.0  steel     Physical
+
+[46769 rows x 18 columns]
+
+# When joining two dataframes via inner join, all of the records that have matching values within the parameters set will be included in the resulting dataframe. Conversely, if the records have no matching values, they will be excluded.
+
+# ==================================================
+# Task 5: Perform a full outer join on the selected datasets. Identify rows containing missing values (NaN).
+# ==================================================
+
+
+# ==================================================
+# Outer Join:
+# ==================================================
+                           abilities  attack  defense  height_m  hp  ... accuracy  pp  power   type damage_class
+0       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...    100.0  20   25.0    bug     Physical
+1       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...     95.0  20   25.0    bug     Physical
+2       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...     95.0  40    NaN    bug       Status
+3       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...    100.0  10   80.0    bug     Physical
+4       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...      NaN  10    NaN    bug       Status
+...                             ...     ...      ...       ...  ..  ...      ...  ..    ...    ...          ...
+46764  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...    100.0  20   60.0  water      Special
+46765  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...    100.0  15   80.0  water      Special
+46766  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...      NaN  10   10.0  water     Physical
+46767  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...    100.0  20   60.0  water     Physical
+46768  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...    100.0   5   25.0  water     Physical
+
+[46769 rows x 18 columns]
+
+# ==================================================
+# NaN rows:
+# ==================================================
+                           abilities  attack  defense  height_m  hp  ... accuracy  pp  power   type damage_class
+2       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...     95.0  40    NaN    bug       Status
+4       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...      NaN  10    NaN    bug       Status
+7       ['Shield Dust', 'Run Away']      30       35       0.3  45  ...      NaN  20    NaN    bug       Status
+15      ['Shield Dust', 'Run Away']      30       35       0.3  45  ...      NaN  10    NaN    bug       Status
+16      ['Shield Dust', 'Run Away']      30       35       0.3  45  ...      NaN  10    NaN    bug       Status
+...                             ...     ...      ...       ...  ..  ...      ...  ..    ...    ...          ...
+46751  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...    100.0  20    NaN  water       Status
+46758  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...      NaN   1    NaN  water     Physical
+46759  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...      NaN   1    NaN  water      Special
+46761  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...      NaN   1  195.0  water      Special
+46766  ['Misty Surge', 'Telepathy']      75      115       1.3  70  ...      NaN  10   10.0  water     Physical
+
+[23423 rows x 18 columns]
+Full outer joins return all records from both dataframes, which includes records that have missing values. There are a lot of records with NaN values in this dataset, which makes sense; some Pokemon moves do not have power or accuracy attributes, as they may be status inflicting moves, or bypass accuracy checks.
+
+# ==================================================
+# Task 6: Source two datasets with the same structure. Combine them using a union join. Remove duplicate records if necessary.
+# ==================================================
+
+
+# The dataset used for this task comes from basketball-reference, a subsite of the larger sports-reference network.
+# Links below:
+# https://www.basketball-reference.com/leagues/NBA_2026_per_game.html
+# https://www.basketball-reference.com/leagues/NBA_2011_per_game.html
+
+      Rk                   Player  Age Team Pos   G  GS    MP    FG  ...  TRB  AST  STL  BLK  TOV   PF   PTS  Awards  Player-additional
+0      1              Luka Dončić   26  LAL  PG  64  64  35.8  10.8  ...  7.7  8.3  1.6  0.5  4.0  2.4  33.5      AS          doncilu01
+1      2  Shai Gilgeous-Alexander   27  OKC  PG  68  68  33.2  10.8  ...  4.3  6.6  1.4  0.8  2.2  2.0  31.1      AS          gilgesh01
+2      3          Anthony Edwards   24  MIN  SG  61  60  35.0   9.9  ...  5.0  3.7  1.4  0.8  2.9  1.9  28.8      AS          edwaran01
+3      4             Jaylen Brown   29  BOS  SF  71  71  34.4  10.4  ...  6.9  5.1  1.0  0.4  3.6  2.7  28.7      AS          brownja02
+4      5             Tyrese Maxey   25  PHI  PG  70  70  38.0   9.9  ...  4.1  6.6  1.9  0.8  2.4  2.2  28.3      AS          maxeyty01
+..   ...                      ...  ...  ...  ..  ..  ..   ...   ...  ...  ...  ...  ...  ...  ...  ...   ...     ...                ...
+229  230             Clint Capela   31  HOU   C  75   3  12.3   1.6  ...  4.6  0.7  0.5  0.8  0.5  1.0   3.8     NaN          capelca01
+230  231          Mohamed Diawara   20  NYK  SF  69   7   9.2   1.3  ...  1.4  0.8  0.2  0.1  0.4  0.7   3.6     NaN          diawamo01
+231  232            Dwight Powell   34  DAL   C  63  12  14.3   1.0  ...  4.1  1.1  0.5  0.3  0.7  2.1   3.3     NaN          poweldw01
+232  233           Jamison Battle   24  TOR  SF  61   2   8.5   1.2  ...  1.5  0.4  0.1  0.0  0.3  0.7   3.1     NaN          battlja01
+233  234               Tyus Jones   29  3TM  PG  67  12  14.6   1.1  ...  1.1  2.4  0.6  0.0  0.4  0.5   3.0     NaN          jonesty01
+
+[234 rows x 32 columns]
+      Rk           Player  Age Team Pos   G  GS    MP  ...  AST  STL  BLK  TOV   PF   PTS                  Awards  Player-additional
+0      1     Kevin Durant   22  OKC  SF  78  78  38.9  ...  2.7  1.1  1.0  2.8  2.0  27.7             MVP-5ASNBA1          duranke01
+1      2     LeBron James   26  MIA  SF  79  79  38.8  ...  7.0  1.6  0.6  3.6  2.1  26.7   MVP-3DPOY-9ASNBA1DEF1          jamesle01
+2      3  Carmelo Anthony   26  2TM  SF  77  77  35.7  ...  2.9  0.9  0.6  2.7  2.9  25.6                      AS          anthoca01
+3      4      Dwyane Wade   29  MIA  SG  76  76  37.1  ...  4.6  1.5  1.1  3.1  2.6  25.5      MVP-7DPOY-16ASNBA2           wadedw01
+4      5      Kobe Bryant   32  LAL  SG  82  82  33.9  ...  4.7  1.2  0.1  3.0  2.1  25.3  MVP-4DPOY-11ASNBA1DEF1          bryanko01
+..   ...              ...  ...  ...  ..  ..  ..   ...  ...  ...  ...  ...  ...  ...   ...                     ...                ...
+181  182      Steve Blake   30  LAL  PG  79   0  20.0  ...  2.2  0.5  0.0  0.9  1.3   4.0                     NaN          blakest01
+182  183  Greivis Vásquez   24  MEM  PG  70   1  12.3  ...  2.2  0.3  0.1  1.0  1.2   3.6                     NaN          vasqugr01
+183  184      Johan Petro   25  NJN   C  77   1  11.6  ...  0.6  0.4  0.4  0.6  2.3   3.5                     NaN          petrojo01
+184  185        Ömer Aşık   24  CHI   C  82   0  12.1  ...  0.4  0.2  0.7  0.8  1.9   2.8                     NaN           asikom01
+185  186     Joel Anthony   28  MIA   C  75  11  19.5  ...  0.3  0.1  1.2  0.5  2.6   2.0                     NaN          anthojo01
+
+[186 rows x 32 columns]
+      Rk                   Player  Age Team Pos   G  GS    MP    FG  ...  TRB  AST  STL  BLK  TOV   PF   PTS  Awards  Player-additional
+0      1              Luka Dončić   26  LAL  PG  64  64  35.8  10.8  ...  7.7  8.3  1.6  0.5  4.0  2.4  33.5      AS          doncilu01
+1      2  Shai Gilgeous-Alexander   27  OKC  PG  68  68  33.2  10.8  ...  4.3  6.6  1.4  0.8  2.2  2.0  31.1      AS          gilgesh01
+2      3          Anthony Edwards   24  MIN  SG  61  60  35.0   9.9  ...  5.0  3.7  1.4  0.8  2.9  1.9  28.8      AS          edwaran01
+3      4             Jaylen Brown   29  BOS  SF  71  71  34.4  10.4  ...  6.9  5.1  1.0  0.4  3.6  2.7  28.7      AS          brownja02
+4      5             Tyrese Maxey   25  PHI  PG  70  70  38.0   9.9  ...  4.1  6.6  1.9  0.8  2.4  2.2  28.3      AS          maxeyty01
+..   ...                      ...  ...  ...  ..  ..  ..   ...   ...  ...  ...  ...  ...  ...  ...  ...   ...     ...                ...
+415  182              Steve Blake   30  LAL  PG  79   0  20.0   1.4  ...  2.0  2.2  0.5  0.0  0.9  1.3   4.0     NaN          blakest01
+416  183          Greivis Vásquez   24  MEM  PG  70   1  12.3   1.4  ...  1.0  2.2  0.3  0.1  1.0  1.2   3.6     NaN          vasqugr01
+417  184              Johan Petro   25  NJN   C  77   1  11.6   1.7  ...  2.8  0.6  0.4  0.4  0.6  2.3   3.5     NaN          petrojo01
+418  185                Ömer Aşık   24  CHI   C  82   0  12.1   1.0  ...  3.7  0.4  0.2  0.7  0.8  1.9   2.8     NaN           asikom01
+419  186             Joel Anthony   28  MIA   C  75  11  19.5   0.7  ...  3.5  0.3  0.1  1.2  0.5  2.6   2.0     NaN          anthojo01
+
+[413 rows x 32 columns]
+
+# Rather than joining records via appending columns to the dataframe, union joins append rows to the end of the dataset, creating new records rather than changing the current records.
+
+# In real data analysis, this can be used for time series, or to compare records with the same data structure i.e. exam results across multiple schools across the country.
+
+
+# ==================================================
+# Task 7: Identify at least one data quality issue. Suggest one improvement to improve the dataset quality. Provide one simple insight gained from the joined data.
+# ==================================================
+
+
+# With the original Pokemon moves dataset being joined to the Pokemon species dataset in order to find viable STAB moves for each species, I only joined the data via the move type and the Pokemon's primary typing. Some pokemon have secondary types, which also receive STAB, so to improve the dataset I should find a way to join the moves if the secondary typing also matches the move type.
+# When we look over the joined dataset, we can see that every type has a wide variety of STAB moves to use. This indicates that the game has been well balanced in order to not provide any one particular type an advantage that could potentially limit the variety of strategies used by players.
